@@ -71,3 +71,24 @@ export default defineConfig([
   },
 ])
 ```
+
+## Running Tests
+
+This project includes end-to-end UI tests built with Vitest and Puppeteer.
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Run the E2E tests:
+
+```bash
+npm run test:e2e
+```
+
+The test suite opens distinct panorama routes and saves screenshots as test artifacts in:
+
+- test-artifacts/e2e/panorama-p0.png
+- test-artifacts/e2e/panorama-p1.png
