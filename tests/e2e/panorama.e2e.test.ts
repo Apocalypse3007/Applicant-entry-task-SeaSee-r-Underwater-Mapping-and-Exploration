@@ -11,6 +11,7 @@ const __dirname = path.dirname(__filename)
 const workspaceRoot = path.resolve(__dirname, '..', '..')
 const artifactsDir = path.resolve(workspaceRoot, 'test-artifacts', 'e2e')
 const baseUrl = 'http://127.0.0.1:4173'
+const isCi = process.env.CI === 'true'
 
 let server: ViteDevServer
 let browser: Browser
@@ -51,6 +52,7 @@ describe.sequential('Panorama viewer end-to-end', () => {
 
     browser = await puppeteer.launch({
       headless: true,
+      args: isCi ? ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] : [],
       defaultViewport: {
         width: 1440,
         height: 900,
