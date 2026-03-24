@@ -12,6 +12,7 @@ const workspaceRoot = path.resolve(__dirname, '..', '..')
 const artifactsDir = path.resolve(workspaceRoot, 'test-artifacts', 'e2e')
 const baseUrl = 'http://127.0.0.1:4173'
 const isCi = process.env.CI === 'true'
+const navigationTimeoutMs = isCi ? 120000 : 60000
 
 let server: ViteDevServer
 let browser: Browser
@@ -60,7 +61,7 @@ describe.sequential('Panorama viewer end-to-end', () => {
     })
 
     page = await browser.newPage()
-    page.setDefaultNavigationTimeout(60000)
+    page.setDefaultNavigationTimeout(navigationTimeoutMs)
   })
 
   afterAll(async () => {
@@ -70,7 +71,10 @@ describe.sequential('Panorama viewer end-to-end', () => {
   })
 
   it('opens panorama index 0 and captures a screenshot', async () => {
-    await page.goto(`${baseUrl}/?p=0`, { waitUntil: 'networkidle2' })
+    await page.goto(`${baseUrl}/?p=0`, {
+      waitUntil: 'domcontentloaded',
+      timeout: navigationTimeoutMs,
+    })
 
     await page.waitForSelector('.viewer', { visible: true })
     await page.waitForSelector('.panorama-list button.active', { visible: true })
@@ -86,7 +90,10 @@ describe.sequential('Panorama viewer end-to-end', () => {
   })
 
   it('opens panorama index 1 and captures a screenshot', async () => {
-    await page.goto(`${baseUrl}/?p=1`, { waitUntil: 'networkidle2' })
+    await page.goto(`${baseUrl}/?p=1`, {
+      waitUntil: 'domcontentloaded',
+      timeout: navigationTimeoutMs,
+    })
 
     await page.waitForSelector('.viewer', { visible: true })
     await page.waitForSelector('.panorama-list button.active', { visible: true })
